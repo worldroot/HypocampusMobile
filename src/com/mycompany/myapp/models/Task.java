@@ -6,7 +6,7 @@
 package com.mycompany.myapp.models;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  *

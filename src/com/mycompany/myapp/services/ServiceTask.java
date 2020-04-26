@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.myapp.utils;
+package com.mycompany.myapp.services;
 
 /**
  *
  * @author mehdibehira
  */
-public class Statics {
-        // a changer selon votre port et ne pas pusher sur git
-       public static final String BASE_URL = "http://localhost:8888";
+public class ServiceTask {
+    
 }

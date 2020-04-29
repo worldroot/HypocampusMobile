@@ -7,6 +7,7 @@ package com.mycompany.myapp.forms;
 
 import com.codename1.components.SpanLabel;
 import com.codename1.ui.Form;
+import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BoxLayout;
 import com.mycompany.myapp.services.ServiceBacklog;
 
@@ -17,6 +18,14 @@ import com.mycompany.myapp.services.ServiceBacklog;
 public class BacklogListForm extends Form {
         public BacklogListForm(Form previous) {
         super("Backlog list", BoxLayout.y());
+        
+        Toolbar tb = new Toolbar(true);
+        setToolbar(tb);
+         
+        getTitleArea().setUIID("Container");
+        setTitle("Backlog Index");
+        getContentPane().setScrollVisible(false);
+
 
         this.add(new SpanLabel(new ServiceBacklog().getAllBacklogs().toString()));
 

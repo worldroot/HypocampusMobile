@@ -36,7 +36,7 @@ public class ServiceEvent {
     
     
         public ArrayList<Event> getAllEvents() {
-        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/event/IndexEventApi";
+        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/Event/Index";
 
         request.setUrl(url);
         request.setPost(false);

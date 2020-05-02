@@ -6,10 +6,15 @@
 package com.mycompany.myapp.forms;
 
 import com.codename1.components.ImageViewer;
+import com.codename1.components.InteractionDialog;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.ui.Button;
+import com.codename1.ui.Command;
 import static com.codename1.ui.Component.BOTTOM;
+import static com.codename1.ui.Component.LEFT;
+import static com.codename1.ui.Component.RIGHT;
+import static com.codename1.ui.Component.TOP;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
@@ -25,7 +30,10 @@ import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
 import com.mycompany.myapp.models.Backlog;
+import com.mycompany.myapp.models.Task;
+import com.mycompany.myapp.services.ServiceBacklog;
 import com.mycompany.myapp.services.ServiceTask;
+import java.util.ArrayList;
 
 /**
  *
@@ -57,8 +65,15 @@ public class BacklogTasksForm extends BaseForm {
                 sl
         ));
 
-
-        this.add(new SpanLabel(new ServiceTask().getAllTasks(id_backlog).toString()));
+         Button btn = null;
+        //this.add(new SpanLabel(new ServiceTask().getAllTasks(id_backlog).toString()));
+        ArrayList<Task> tasks =  new ServiceTask().getAllTasks(id_backlog);
+        for (Task t : tasks) {
+            addItem(t, res, 
+                            btn = new Button(new Command("taches", t.getId()))
+                    
+                    , this);
+        }
 
        
         this.show();
@@ -68,6 +83,83 @@ public class BacklogTasksForm extends BaseForm {
         });
         
    }
+   
+    public void addItem(Task tache , Resources res, Button btn, Form this_form) {
+            
+       Button close = new Button("Close");   
+       String archived_string="";
+
+        ImageViewer img = null;
+        Container C1 = new Container(new BoxLayout(BoxLayout.X_AXIS));
+
+        img = new ImageViewer(res.getImage("Software-Git.png"));
+        Container C2 = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+        Label task_id = new Label(Integer.toString(tache.getId()));
+        Label task_name = new Label(tache.getTitle());
+        Label story_points = new Label(Integer.toString(tache.getStory_points()));
+        Label priority = new Label(Integer.toString(tache.getPriority()));
+        if(tache.getArchive() == 0){
+            archived_string = "Non Archivée";
+        }
+        else{
+            archived_string = "Archivée";
+        }
+        Label archived = new Label(archived_string);
+        
+        Label sprint_name = new Label(tache.getSprint_name());
+        Label description_foncti = new Label(tache.getDescription_fonctionnel());
+        Label description_technique = new Label(tache.getDescription_technique());
+        
+        
+        
+
+        task_name.addPointerPressedListener((ActionListener) (ActionEvent evt) -> {
+
+        InteractionDialog dlg = new InteractionDialog("Tache",  new BorderLayout());
+          dlg.add(BorderLayout.CENTER, BoxLayout.encloseY(new SpanLabel("Id :" + task_id.getText() + " \n "
+                    + "Titre : " + task_name.getText() + " \n "
+                    + "Story points : "+ story_points.getText()+ " \n "
+                    + "Priorite : " + priority.getText() + " \n "
+                    + "Archive : "+ archived.getText() + " \n "
+                    + "Sprint : "+ sprint_name.getText()+ " \n "
+                    + "Description Fonctionnele : "+ description_foncti.getText()+ " \n " 
+                    + "Description Technique : "+ description_technique.getText()+ " \n "  ), btn, close));
+            
+
+                        
+                        
+                dlg.show(TOP, BOTTOM, LEFT, RIGHT);
+            close.addActionListener((ee) -> dlg.dispose());
+              
+            
+        });
+        
+                btn.addActionListener((evt) -> {
+
+                            // new BacklogTasksForm(BacklogListForm.this, res, backlog.getId()).show();
+ 
+                     });
+        
+           
+        
+                
+                 
+        C2.add(task_name);
+        C2.add(story_points);
+        C2.add(sprint_name);
+        
+        C1.add(img);
+        C1.add(C2);
+        C1.setLeadComponent(task_name);
+        
+        this.add(C1);
+        this.add(createLineSeparator(0xeeeeee));
+        this.refreshTheme();
+        
+   
+    }
+   
+   
    
 
     

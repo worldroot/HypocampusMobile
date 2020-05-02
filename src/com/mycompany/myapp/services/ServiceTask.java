@@ -70,7 +70,7 @@ public class ServiceTask {
                 String state= (String)(obj.get("state").toString());
                 int priorite= (int)Float.parseFloat(obj.get("priority").toString());
                 int archived= (int)Float.parseFloat(obj.get("archive").toString());
-
+                
 
                 Map<String, Object> backlog = (Map<String, Object>) obj.get("backlog");
                 int backlog_id= (int)Float.parseFloat(backlog.get("id").toString());

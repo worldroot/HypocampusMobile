@@ -15,6 +15,7 @@ public class Backlog {
     private int points_in_progress;
     private int points_to_do;
     private int project_id;
+    private String project_name;
 
     public Backlog(int id, int points_to_do, int points_in_progress, int points_done, int project_id) {
         this.id = id;
@@ -29,6 +30,15 @@ public class Backlog {
         this.points_in_progress = points_in_progress;
         this.points_to_do = points_to_do;
         this.project_id = project_id;
+    }
+    
+    public Backlog(int id,int points_to_do, int points_in_progress, int points_done, int project_id, String project_name) {
+        this.id = id;
+        this.points_done = points_done;
+        this.points_in_progress = points_in_progress;
+        this.points_to_do = points_to_do;
+        this.project_id = project_id;
+        this.project_name = project_name;
     }
 
     public Backlog(int aInt, int aInt0, String string) {
@@ -61,6 +71,14 @@ public class Backlog {
         this.points_done = points_done;
     }
 
+    public String getProject_name() {
+        return project_name;
+    }
+
+    public void setProject_name(String project_name) {
+        this.project_name = project_name;
+    }
+
     public int getPoints_in_progress() {
         return points_in_progress;
     }
@@ -87,7 +105,7 @@ public class Backlog {
     
     @Override
     public String toString() {
-        return "Backlog{" + "id=" + id + ", points_done=" + points_done + ", points_in_progress=" + points_in_progress + ", points_to_do=" + points_to_do + ", project_id=" + project_id + '}';
+        return "Backlog{" + "id=" + id + ", points_done=" + points_done + ", points_in_progress=" + points_in_progress + ", points_to_do=" + points_to_do + ", project_id=" + project_id + "project_name="+ project_name+ '}';
     }
     
 }

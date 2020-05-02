@@ -68,9 +68,10 @@ public class ServiceBacklog {
                 int points_done= (int)Float.parseFloat(obj.get("pointsDone").toString());
                 Map<String, Object> project = (Map<String, Object>) obj.get("project");
                 int project_id= (int)Float.parseFloat(project.get("id").toString());
+                String project_name= (String)(project.get("projetName").toString());
                 //int status = (int)Float.parseFloat(obj.get("status").toString());
                 //String name = obj.get("name").toString();
-                backlogs.add(new Backlog(id, points_to_do, points_in_progress, points_done, project_id));
+                backlogs.add(new Backlog(id, points_to_do, points_in_progress, points_done, project_id, project_name));
             }
 
         } catch (IOException ex) {

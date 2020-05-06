@@ -28,6 +28,7 @@ public class EventForm extends BaseForm {
 
         Button btnAddBacklog = new Button("Add Event");
         Button btnBacklogList = new Button("Event List");
+        Button btnPlist = new Button("Participants List");
         
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -59,11 +60,15 @@ public class EventForm extends BaseForm {
             previous.showBack();
         });
         
-                btnBacklogList.addActionListener((evt) -> {
+            btnBacklogList.addActionListener((evt) -> {
             new EventListForm(this).show();
         });
+            
+            btnPlist.addActionListener((evt) -> {
+            new ParticipantListForm(this).show();
+        });
 
-        this.addAll(new Label("Choose an option :"), btnAddBacklog, btnBacklogList);
+        this.addAll(new Label("Choose an option :"), btnAddBacklog, btnBacklogList, btnPlist);
     }
     
         

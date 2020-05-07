@@ -98,4 +98,41 @@ public class ServiceTask {
         return tasks;
     }
     
+    public boolean deleteTask(int id_b, int id) {
+        String url = Statics.BASE_URL + "/ProjetPi/Hypocampus/web/app_dev.php/api/ProjectBacklog/view/"+id_b+"/task/remove/"+id;
+
+        request.setUrl(url);
+        request.setPost(false);
+        request.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK
+                request.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return responseResult;
+
+        }
+    
+    public boolean addTask(Task task) {
+         String url = Statics.BASE_URL + "/ProjetPi/Hypocampus/web/app_dev.php/api/ProjectBacklog/view/" + task.getBacklog_id() +""
+                 + "/task/add/" + task.getTitle() + "/" + task.getStory_points() + "/" + task.getState() + "/" + task.getPriority() + "/" +task.getDescription_fonctionnel()+"/"
+                 +task.getSprint_id()+"/"+task.getFinished_date();
+
+
+        request.setUrl(url);
+        request.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK
+                request.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return responseResult;
+    }
+    
 }

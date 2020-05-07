@@ -39,6 +39,7 @@ import java.util.ArrayList;
  */
 public class BacklogListForm extends BaseForm {
     int backlog_clicked = -1;
+    InteractionDialog dlg = null;
         public BacklogListForm(Form previous, Resources res) {
         super("Backlog list", BoxLayout.y());
         
@@ -68,12 +69,13 @@ public class BacklogListForm extends BaseForm {
         ));
 
                 Button btn = null;
-
+                Button btn2 = null;
         //this.add(new SpanLabel(new ServiceBacklog().getAllBacklogs().toString()));
         ArrayList<Backlog> backlogs =  new ServiceBacklog().getAllBacklogs();
         for (Backlog b : backlogs) {
             addItem(b, res, 
-                            btn = new Button(new Command("taches", b.getId()))
+                            btn = new Button(new Command("taches", b.getId())),
+                            btn2 = new Button(new Command("Ajouter Tache", b.getId()))
                     
                     , this);
         }
@@ -90,7 +92,7 @@ public class BacklogListForm extends BaseForm {
         
         
         
-        public int addItem(Backlog backlog , Resources res, Button btn, Form this_form) {
+        public int addItem(Backlog backlog , Resources res, Button btn,Button btn2, Form this_form) {
             
                              Button close = new Button("Close");           
 
@@ -108,18 +110,29 @@ public class BacklogListForm extends BaseForm {
 
         backlog_id.addPointerPressedListener((ActionListener) (ActionEvent evt) -> {
 
-            InteractionDialog dlg = new InteractionDialog("Backlog",  new BorderLayout());
+            dlg = new InteractionDialog("Backlog",  new BorderLayout());
           dlg.add(BorderLayout.CENTER, BoxLayout.encloseY(new SpanLabel("" + backlog_id.getText() + " \n "
                     + "Points to do : " + points_to_do.getText() + " \n "
                     + "Points in progress : "+ points_in_progress.getText()+ " \n "
                     + "Points Done : " + points_done.getText() + " \n "
-                    + "Project name : "+ project_name.getText()), btn, close));
+                    + "Project name : "+ project_name.getText()), btn, btn2, close));
             
 
                         
                         
                 dlg.show(TOP, BOTTOM, LEFT, RIGHT);
-            close.addActionListener((ee) -> dlg.dispose());
+            close.addActionListener((ee) -> 
+            {           dlg.dispose();
+                         dlg.remove();
+                        close.remove();
+                        btn.remove();
+                        btn2.remove();
+                        
+                        removeComponent(dlg);
+            }
+                    
+                    
+            );
               
             
         });
@@ -127,6 +140,11 @@ public class BacklogListForm extends BaseForm {
                 btn.addActionListener((evt) -> {
 
                              new BacklogTasksForm(BacklogListForm.this, res, backlog.getId()).show();
+ 
+                     });
+                btn2.addActionListener((evt) -> {
+
+                     new AjoutTaskForm(BacklogListForm.this, res, backlog.getId()).show();
  
                      });
         

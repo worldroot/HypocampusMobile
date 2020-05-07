@@ -40,6 +40,7 @@ import java.util.ArrayList;
  * @author mehdibehira
  */
 public class BacklogTasksForm extends BaseForm {
+    InteractionDialog dlg = null;
     
    public BacklogTasksForm(Form previous, Resources res, int id_backlog) {
         super("Taches list", BoxLayout.y());
@@ -51,8 +52,7 @@ public class BacklogTasksForm extends BaseForm {
         setTitle("Taches Index");
         getContentPane().setScrollVisible(false);
 
-        
-         Image img = res.getImage("welcome-background.jpg");
+        Image img = res.getImage("welcome-background.jpg");
         if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
             img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
         }
@@ -60,8 +60,10 @@ public class BacklogTasksForm extends BaseForm {
         sl.setUIID("BottomPad");
         sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
 
-        
+       
                 add(LayeredLayout.encloseIn(
+                        
+                        
                 sl
         ));
 
@@ -71,8 +73,7 @@ public class BacklogTasksForm extends BaseForm {
         for (Task t : tasks) {
             addItem(t, res, 
                             btn = new Button(new Command("taches", t.getId()))
-                    
-                    , this);
+                    , this, id_backlog, previous);
         }
 
        
@@ -84,9 +85,10 @@ public class BacklogTasksForm extends BaseForm {
         
    }
    
-    public void addItem(Task tache , Resources res, Button btn, Form this_form) {
+    public void addItem(Task tache , Resources res, Button btn, Form this_form, int id_backlog, Form previous) {
             
-       Button close = new Button("Close");   
+       Button close = new Button("Close");
+       Button delete = new Button("Delete");
        String archived_string="";
 
         ImageViewer img = null;
@@ -114,8 +116,11 @@ public class BacklogTasksForm extends BaseForm {
         
 
         task_name.addPointerPressedListener((ActionListener) (ActionEvent evt) -> {
-
-        InteractionDialog dlg = new InteractionDialog("Tache",  new BorderLayout());
+           
+            
+            
+                dlg = new InteractionDialog("Tache",  new BorderLayout());
+        
           dlg.add(BorderLayout.CENTER, BoxLayout.encloseY(new SpanLabel("Id :" + task_id.getText() + " \n "
                     + "Titre : " + task_name.getText() + " \n "
                     + "Story points : "+ story_points.getText()+ " \n "
@@ -123,22 +128,43 @@ public class BacklogTasksForm extends BaseForm {
                     + "Archive : "+ archived.getText() + " \n "
                     + "Sprint : "+ sprint_name.getText()+ " \n "
                     + "Description Fonctionnele : "+ description_foncti.getText()+ " \n " 
-                    + "Description Technique : "+ description_technique.getText()+ " \n "  ), btn, close));
-            
+                    + "Description Technique : "+ description_technique.getText()+ " \n "  ), delete, close));
+          dlg.show(TOP, BOTTOM, LEFT, RIGHT);
+                
+        
+        
 
+            close.addActionListener(
+                    (ee) -> {
+                        dlg.dispose();
+                        dlg.remove();
+                        close.remove();
                         
-                        
-                dlg.show(TOP, BOTTOM, LEFT, RIGHT);
-            close.addActionListener((ee) -> dlg.dispose());
+                        removeComponent(dlg);
+                                });
+           
+            delete.addActionListener(
+                    (ee) -> {
+                               if (new ServiceTask().deleteTask(id_backlog, tache.getId()))
+                               {
+                                 Dialog.show("Alert", "Tache supprimée", new Command("OK"));
+                               } else{
+                                 Dialog.show("Alert", "Erreur", new Command("OK"));
+                               }
+                               dlg.dispose();
+                               dlg.remove();
+                               delete.remove();
+                               removeComponent(dlg);
+                               this.refreshTheme();
+                               this_form.repaint();
+                               new BacklogTasksForm(previous, res, id_backlog).show();
+                                });
+                    
               
             
         });
         
-                btn.addActionListener((evt) -> {
 
-                            // new BacklogTasksForm(BacklogListForm.this, res, backlog.getId()).show();
- 
-                     });
         
            
         
@@ -155,7 +181,7 @@ public class BacklogTasksForm extends BaseForm {
         this.add(C1);
         this.add(createLineSeparator(0xeeeeee));
         this.refreshTheme();
-        
+         
    
     }
    

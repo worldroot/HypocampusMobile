@@ -62,7 +62,7 @@ public class EventForm extends BaseForm {
         });
         
             btnEventList.addActionListener((evt) -> {
-            new EventListForm(this, res).show();
+            new EventListForm(EventForm.this,res).show();
         });
             
             btnAddEvent.addActionListener((evt) -> {

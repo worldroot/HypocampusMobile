@@ -26,13 +26,11 @@ import com.mycompany.myapp.services.ServiceEvent;
  */
 public class EventListForm extends BaseForm {
     
- public EventListForm(Form previous, Resources res) {
-         
-         
-        super("Add Event", BoxLayout.y());
+    public EventListForm(Form previous,Resources res) {
+        
+        super("Event List", BoxLayout.y());
 
-        
-        
+       
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
          
@@ -49,26 +47,20 @@ public class EventListForm extends BaseForm {
         ScaleImageLabel sl = new ScaleImageLabel(img);
         sl.setUIID("BottomPad");
         sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
-
-        
         
                 add(LayeredLayout.encloseIn(
                 sl
         ));
-                
-        this.add(new SpanLabel(new ServiceEvent().getAllEvents().toString()));
 
+        this.add(new SpanLabel(new ServiceEvent().getAllEvents().toString()));
         this.getToolbar().addCommandToLeftBar("Return", null, (evt) -> {
             previous.showBack();
         });
         
-       
-    }
- 
-}
-/*    
-    public EventListForm(Form previous) {
-              
+           
+
+        
+    /*              
         super("Event list", BoxLayout.y());
         
         Toolbar tb = new Toolbar(true);
@@ -84,6 +76,10 @@ public class EventListForm extends BaseForm {
         this.getToolbar().addCommandToLeftBar("Return", null, (evt) -> {
             previous.showBack();
         });
-    }
 */    
+        }
+
+
+}
+   
 

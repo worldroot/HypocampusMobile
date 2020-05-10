@@ -78,10 +78,14 @@ public class BackendForm extends BaseForm {
         btnEvent.addActionListener((evt) -> {
             new EventForm(this, res).show();
         });
-
-        this.addAll(new Label("Choose an option :"), btnBacklog, btnEvent);
         
-      
+        Button btnProject = new Button("Projets");
+        
+        btnProject.addActionListener((evt) -> {
+            new AfficherProjectForm(this, res).show();
+        });
+
+        this.addAll(new Label("Choose an option :"), btnBacklog, btnEvent, btnProject);
     }
     
 }

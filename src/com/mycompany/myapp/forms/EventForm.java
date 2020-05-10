@@ -17,6 +17,7 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.mycompany.myapp.models.Event;
 
 /**
  *
@@ -26,8 +27,8 @@ public class EventForm extends BaseForm {
      public EventForm(Form previous, Resources res) {
         super("Event Menu", BoxLayout.y());
 
-        Button btnAddBacklog = new Button("Add Event");
-        Button btnBacklogList = new Button("Event List");
+        Button btnAddEvent = new Button("Add Event");
+        Button btnEventList = new Button("Event List");
         Button btnPlist = new Button("Participants List");
         
         Toolbar tb = new Toolbar(true);
@@ -60,15 +61,19 @@ public class EventForm extends BaseForm {
             previous.showBack();
         });
         
-            btnBacklogList.addActionListener((evt) -> {
-            new EventListForm(this).show();
+            btnEventList.addActionListener((evt) -> {
+            new EventListForm(this, res).show();
+        });
+            
+            btnAddEvent.addActionListener((evt) -> {
+            new EventAddForm(EventForm.this, res).show();
         });
             
             btnPlist.addActionListener((evt) -> {
-            new ParticipantListForm(this).show();
+            new ParticipantListForm(this, res).show();
         });
 
-        this.addAll(new Label("Choose an option :"), btnAddBacklog, btnBacklogList, btnPlist);
+        this.addAll(new Label("Choose an option :"), btnAddEvent, btnEventList, btnPlist);
     }
     
         

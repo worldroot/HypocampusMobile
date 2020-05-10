@@ -33,7 +33,7 @@ public class Event {
         this.updated_at = updated_at;
     }
 
-    public Event(String titreEvent, int numeroEvent, String typeEvent, Date dateEvent, Date enddateEvent, String image_name) {
+    public Event(String titreEvent, String typeEvent, int numeroEvent, Date dateEvent, Date enddateEvent, String image_name) {
         this.titreEvent = titreEvent;
         this.numeroEvent = numeroEvent;
         this.typeEvent = typeEvent;
@@ -50,12 +50,18 @@ public class Event {
         this.enddateEvent = enddateEvent;
     }
 
+    public Event(String titreEvent, String typeEvent, int numeroEvent) {
+        this.titreEvent = titreEvent;
+        this.numeroEvent = numeroEvent;
+        this.typeEvent = typeEvent;
+    }
+
     public Event(int idev) {
         this.idev = idev;
     }
 
-    public Event(int idev, String titreEvent, int numeroEvent, String typeEvent, Date dateEvent, Date enddateEvent) {
-        this.idev = idev;
+    public Event(String titreEvent,  String typeEvent,int numeroEvent, Date dateEvent, Date enddateEvent) {
+        
         this.titreEvent = titreEvent;
         this.numeroEvent = numeroEvent;
         this.typeEvent = typeEvent;

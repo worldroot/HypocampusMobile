@@ -84,6 +84,38 @@ public class ServiceEvent {
 
         return events;
     }
+    
+    
+    public boolean resultOK;
+    public boolean addEvent(Event ev) {
+        
+        String url = Statics.BASE_URL+"/Hypocampus/web/app_dev.php/api/Event/Add" + "/" + ev.getIdev()+ "/" + ev.getTitreEvent() + "/" 
+                + ev.getTypeEvent()+ "/" + ev.getNumeroEvent() + "/" + ev.getDateEvent() + "/" + ev.getEnddateEvent() +"/"+  ev.getImage_name() ;
+        ConnectionRequest req = new ConnectionRequest(url);
+        req.addResponseListener((NetworkEvent evt) -> {
+            resultOK = req.getResponseCode()==200; //Code Http 200 OK 
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+        return resultOK;
+    }
+    
+     public boolean deleteEvent(int idev) {
+        String url = Statics.BASE_URL + "/ProjetPi/Hypocampus/web/app_dev.php/api/Event/Delete/"+idev ;
+
+        request.setUrl(url);
+        request.setPost(false);
+        request.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK
+                request.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return responseResult;
+
+        }
 
     
 }

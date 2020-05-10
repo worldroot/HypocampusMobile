@@ -180,7 +180,7 @@ Label name_project = new Label("             Project Name : "+project_.getName()
         //Icons 
         FontImage.setMaterialIcon(delete, FontImage.MATERIAL_DELETE);
         FontImage.setMaterialIcon(edit, FontImage.MATERIAL_EDIT);
-        FontImage.setMaterialIcon(name, FontImage.MATERIAL_TABLE_CHART);
+        //FontImage.setMaterialIcon(name, FontImage.MATERIAL_TABLE_CHART);
         Servicesprint s=new Servicesprint();
         delete.addPointerPressedListener((ActionListener) (ActionEvent evt) -> {
         s.deleteSprint(Sprint.getId());

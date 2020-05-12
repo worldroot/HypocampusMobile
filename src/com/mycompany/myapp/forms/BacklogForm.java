@@ -66,7 +66,7 @@ public class BacklogForm extends BaseForm {
         });
         
                 btnBacklogList.addActionListener((evt) -> {
-            new BacklogListForm(this).show();
+            new BacklogListForm(this, res).show();
         });
 
         this.addAll(new Label("Choose an option :"), btnAddBacklog, btnBacklogList);

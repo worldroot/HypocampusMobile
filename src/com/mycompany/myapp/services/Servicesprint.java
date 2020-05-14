@@ -89,7 +89,6 @@ public class Servicesprint {
         request.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
-                System.out.println(new String(request.getResponseData()));
                 Sprints = parseSprints(new String(request.getResponseData()));
                 request.removeResponseListener(this);
             }
@@ -108,8 +107,8 @@ public class Servicesprint {
             cr.addArgument("sprintname", s.getName());
             cr.addArgument("projets_id", s.getProject_id()+"");
             //->substring(0,10)
-            String start_date = parseDate(s.getStart_date_sprint().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "MM-dd-yyyy");
-            String end_date = parseDate(s.getEnd_date_sprint().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "MM-dd-yyyy");
+            String start_date = parseDate(s.getStart_date_sprint().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "yyyy-MM-dd");
+            String end_date = parseDate(s.getEnd_date_sprint().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "yyyy-MM-dd");
 
             cr.addArgument("startDatesprint",start_date);
             cr.addArgument("endDatesprint",end_date);
@@ -150,8 +149,8 @@ public class Servicesprint {
             cr.addArgument("sprintname", s.getName());
             cr.addArgument("projets_id", s.getProject_id()+"");
             //->substring(0,10)
-            String start_date = parseDate(s.getStart_date_sprint().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "MM-dd-yyyy");
-            String end_date = parseDate(s.getEnd_date_sprint().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "MM-dd-yyyy");
+            String start_date = parseDate(s.getStart_date_sprint().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "yyyy-MM-dd");
+            String end_date = parseDate(s.getEnd_date_sprint().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "yyyy-MM-dd");
 
             cr.addArgument("startDatesprint",start_date);
             cr.addArgument("endDatesprint",end_date);

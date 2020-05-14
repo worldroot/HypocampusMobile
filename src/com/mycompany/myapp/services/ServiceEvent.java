@@ -8,15 +8,21 @@ package com.mycompany.myapp.services;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
+import com.codename1.io.MultipartRequest;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.events.ActionListener;
 
 import com.mycompany.myapp.models.Event;
+import com.mycompany.myapp.models.Project;
 import com.mycompany.myapp.utils.DataSource;
 import com.mycompany.myapp.utils.Statics;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +41,8 @@ public class ServiceEvent {
     }
     
     
-    public ArrayList<Event> getAllEvents() {
-        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/Event/Index";
+    public ArrayList<Event> getAllEvents(int idev) {
+        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/Event/Index/"+idev;
 
         request.setUrl(url);
         request.setPost(false);
@@ -99,7 +105,9 @@ public class ServiceEvent {
         return resultOK;
     }
     
-     public boolean deleteEvent(int idev) {
+    
+    
+    public boolean deleteEvent(int idev) {
         String url = Statics.BASE_URL + "/ProjetPi/Hypocampus/web/app_dev.php/api/Event/Delete/"+idev ;
 
         request.setUrl(url);
@@ -116,6 +124,49 @@ public class ServiceEvent {
         return responseResult;
 
         }
+    
+    
+    public void updateEvent(Event p,int idev) {
+        try {
+             
+                MultipartRequest cr = new MultipartRequest();
+                cr.setUrl(Statics.BASE_URL+"/Hypocampus/web/app_dev.php/api/Event/Update/"+idev);
+                cr.setPost(true);
+                cr.addArgument("Titre", p.getTitreEvent());
+                cr.addArgument("Type", p.getTypeEvent());
+                //cr.addArgument("Cap", Integer.parseInt(p.getNumeroEvent() ) );
+                cr.addArgument("Img", p.getImage_name());
+
+                String start_date = parseDate(p.getDateEvent().toString() ,"", "MM-dd-yyyy");
+                String end_date = parseDate(p.getEnddateEvent().toString() ,"", "MM-dd-yyyy");
+
+                cr.addArgument("start_date",start_date);
+                cr.addArgument("end_date",end_date);
+
+                cr.addResponseListener(e -> {
+
+                    if(cr.getResponseCode() == 200)
+                        Dialog.show("Modifier","Event Modifié " +  p.getTitreEvent(), "OK", null);
+                    });
+
+                    NetworkManager.getInstance().addToQueueAndWait(cr);
+            }
+        
+        catch (ParseException e1) {}        
+    }
+    
+    
+    
+    public String parseDate(String dateTime,String inputPattern, String outputPattern) throws ParseException {
+
+       SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+       SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+
+       Date date = inputFormat.parse(dateTime);
+       String str = outputFormat.format(date);
+
+       return str;
+}
 
     
 }

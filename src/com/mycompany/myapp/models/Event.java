@@ -22,7 +22,7 @@ public class Event {
     private String image_name;
     private Date updated_at;
 
-    public Event(int idev, String titreEvent, int numeroEvent, String typeEvent, Date dateEvent, Date enddateEvent, String image_name, Date updated_at) {
+    public Event(int idev, String titreEvent, int numeroEvent, String typeEvent, Date dateEvent, Date enddateEvent, String image_name) {
         this.idev = idev;
         this.titreEvent = titreEvent;
         this.numeroEvent = numeroEvent;
@@ -30,7 +30,7 @@ public class Event {
         this.dateEvent = dateEvent;
         this.enddateEvent = enddateEvent;
         this.image_name = image_name;
-        this.updated_at = updated_at;
+    
     }
 
     public Event(String titreEvent, String typeEvent, int numeroEvent, Date dateEvent, Date enddateEvent, String image_name) {

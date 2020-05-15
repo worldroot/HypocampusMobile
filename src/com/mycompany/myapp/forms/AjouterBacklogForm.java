@@ -16,6 +16,7 @@ import static com.codename1.ui.Component.LEFT;
 import static com.codename1.ui.Component.RIGHT;
 import static com.codename1.ui.Component.TOP;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
@@ -42,7 +43,8 @@ import java.util.ArrayList;
  * @author mehdibehira
  */
 public class AjouterBacklogForm extends  BaseForm {
-    int project_id = -1;
+    
+    int redflag = 0;
     ComboBox<Project> combo;
     
      public AjouterBacklogForm(Form previous, Resources res){
@@ -56,15 +58,14 @@ public class AjouterBacklogForm extends  BaseForm {
 setUIID("SignIn");
         tb.setBackCommand("", e -> previous.showBack());
                 
-        TextField titre = new TextField("", "Titre", 20, TextField.ANY);
+      
         ServiceProject sp=new ServiceProject();
-        Picker projectPicker = new Picker();
-        projectPicker.setType(Display.PICKER_TYPE_STRINGS);
+   
         
        
          
-        ArrayList<String> list_project = new ArrayList<>();
-      //  ComboBox combo = new ComboBox();
+       
+         combo = new ComboBox();
    
         for (Project project :  sp.getAllProjects()) {
             combo.addItem(project);
@@ -84,8 +85,8 @@ setUIID("SignIn");
          Button confirmer = new Button("Confirmer");
         
         Container content = BoxLayout.encloseY(
-                new Label("Ajouter", "LogoLabel"),
-                new FloatingHint(titre),
+                new Label("Ajouter BACKLOG", "LogoLabel"),
+              
                 createLineSeparator(),
                 combo,
                 createLineSeparator()
@@ -99,22 +100,33 @@ setUIID("SignIn");
         ));
         confirmer.requestFocus();
         confirmer.addActionListener(e ->
-        {
-              for (Project project :  sp.getAllProjects()) {
-                  if ( projectPicker.getText() == project.getName())
-                  {
-                       project_id = project.getId();
-                  }
-              }
+        { 
+           
+           
+    
                     
            Backlog b = new Backlog(0, 0, 0, combo.getSelectedItem().getId());
             ServiceBacklog ServiB = new ServiceBacklog();
-            if ( project_id != -1){
+           
                 
-                   ServiB.ajouterBacklog(b);
+                for(Backlog backlog : ServiB.getAllBacklogs()){
+                    if(backlog.getProject_id() == combo.getSelectedItem().getId()){
+                         redflag = 1;
+                         Dialog.show("WARNING","Ce projet a deja un backlog ", "OK",null);
+                    }
+
+                    
+                }
+                
+                if (redflag==0){
+                          ServiB.ajouterBacklog(b);
                     new BacklogForm(previous,res).show();
+                        Dialog.show("Succes","backlog Ajouter ", "OK",null);
+                        
+                 }
+                 
                 
-            }
+            
 
             
         }

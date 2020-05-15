@@ -81,7 +81,7 @@ public class ServiceBacklog {
     }
     
     public boolean ajouterBacklog(Backlog b){
-    String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/ProjectBacklog/add/"+b.getProject_id();
+    String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/ProjectBacklog/new/"+b.getProject_id();
 
 
         request.setUrl(url);

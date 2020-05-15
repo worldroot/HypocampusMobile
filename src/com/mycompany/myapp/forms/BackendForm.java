@@ -97,8 +97,7 @@ public class BackendForm extends BaseForm {
             new MeetingForm(this, res).show();
         });
 
-        this.addAll(new Label("Choose an option :"), btnBacklog, btnEvent, btnProject);
-        this.addAll(new Label("Choose an option :"), btnBacklog, btnTeam, btnMeeting);
+        this.addAll(new Label("Choose an option :"), btnBacklog, btnEvent, btnProject, btnTeam, btnMeeting);
 		
     }
     

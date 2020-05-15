@@ -159,8 +159,8 @@ public class ServiceProject {
             cr.addArgument("projet_name", p.getName());
             cr.addArgument("owner", p.getOwner());
 
-            String start_date = parseDate(p.getStart_date().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "MM-dd-yyyy");
-            String end_date = parseDate(p.getEnd_date().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "MM-dd-yyyy");
+            String start_date = parseDate(p.getStart_date().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "yyyy-MM-dd");
+            String end_date = parseDate(p.getEnd_date().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "yyyy-MM-dd");
 
             cr.addArgument("start_date",start_date);
             cr.addArgument("end_date",end_date);
@@ -196,8 +196,8 @@ public class ServiceProject {
             cr.addArgument("projet_name", p.getName());
             cr.addArgument("owner", p.getOwner());
             //->substring(0,10)
-            String start_date = parseDate(p.getStart_date().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "MM-dd-yyyy");
-            String end_date = parseDate(p.getEnd_date().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "MM-dd-yyyy");
+            String start_date = parseDate(p.getStart_date().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "yyyy-MM-dd");
+            String end_date = parseDate(p.getEnd_date().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "yyyy-MM-dd");
 
             cr.addArgument("start_date",start_date);
             cr.addArgument("end_date",end_date);
@@ -218,29 +218,7 @@ public class ServiceProject {
     }
     
     
-        
-        /*
-         public int IProjects(String jsonText)  {
-        try {
-            Projects = new ArrayList<>();
-            Project p = new Project();
-            JSONParser jp = new JSONParser();
-            
-           //String s = "["+jsonText+"]";
-            Map<String, Object> ProjectListJson = jp.parseJSON(new CharArrayReader(find_(jsonText).toCharArray()));
-            List<Map<String, Object>> list = (List<Map<String, Object>>) ProjectListJson.get("root");
-            for (Map<String, Object> obj : list) {
-                obj.get(obj);
-            }
 
-
-        } catch (IOException ex) {
-        }
-
-        return Projects;
-    }
-        */
-        
         
         
         

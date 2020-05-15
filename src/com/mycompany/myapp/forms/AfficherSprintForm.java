@@ -124,12 +124,12 @@ Label name_project = new Label("             Project Name : "+project_.getName()
         Container C1 = new Container(new BoxLayout(BoxLayout.X_AXIS));
         Label Completed = new Label("                                 Completed ");
         Label Progress = new Label("                                  In Progress ");
-        Label delete = new Label("");
+        Label delete = new Label(" ");
         delete.setTextPosition(LEFT);
         Label name = new Label(" Sprint Name : "+Sprint.getName());
         Label start_date = new Label("  "+"Start Date : "+Sprint.getStart_date_sprint());
         Label end_date = new Label("  "+"End Date : "+Sprint.getEnd_date_sprint());
-        Label edit = new Label("                                                                        ");
+        Label edit = new Label("                                                                               ");
         Button btnSprint_task=new Button(" voir les taches ");
         btnSprint_task.addActionListener((evt) -> {
             new NOT_DRAG_DROP_Form(this,res,Sprint).show();

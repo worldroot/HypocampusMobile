@@ -40,7 +40,9 @@ import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.mycompany.myapp.models.Project;
+import com.mycompany.myapp.models.Sprint;
 import com.mycompany.myapp.services.ServiceProject;
+import com.mycompany.myapp.services.Servicesprint;
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -60,48 +62,19 @@ public class AfficherProjectForm extends  BaseForm{
         getTitleArea().setUIID("Container");
         setTitle("liste des projets");
         getContentPane().setScrollVisible(false);
-        /*
-        //recherche
-        Toolbar.setGlobalToolbar(true);
-Style s = UIManager.getInstance().getComponentStyle("Title");
 
-TextField searchField = new TextField("", "Toolbar Search"); 
-searchField.getHintLabel().setUIID("Title");
-searchField.setUIID("Title");
-searchField.getAllStyles().setAlignment(Component.LEFT);
-getToolbar().setTitleComponent(searchField);
-FontImage searchIcon = FontImage.createMaterial(FontImage.MATERIAL_SEARCH, s);
-searchField.addDataChangeListener((i1, i2) -> { 
-    String t = searchField.getText();
-    if(t.length() < 1) {
-        for(Component cmp : this.getContentPane()) {
-            cmp.setHidden(false);
-            cmp.setVisible(true);
-        }
-    } else {
-        t = t.toLowerCase();
-        for(Component cmp : this.getContentPane()) {
-            String val = null;
-            if(cmp instanceof Label) {
-                val = ((Label)cmp).getText();
-            } else {
-                if(cmp instanceof Container) {
-                    val = ((TextArea)cmp).getText();
-                } else {
-                    val = (String)cmp.getPropertyValue("text");
-                }
+        //recherche
+        this.setLayout(BoxLayout.y());
+        Container cont18 = this.getContentPane();
+        this.getToolbar().addSearchCommand((e) -> {
+            String text = (String) e.getSource();
+            for (Component c : this.getContentPane()) {
+                c.setHidden(c instanceof Label && ((Label) c).getText().indexOf(text) < 0);
             }
-            boolean show = val != null && val.toLowerCase().indexOf(t) > -1;
-            cmp.setHidden(!show); 
-            cmp.setVisible(show);
-        }
-    }
-    getContentPane().animateLayout(250);
-});
-getToolbar().addCommandToRightBar("", searchIcon, (e) -> {
-    searchField.startEditingAsync(); 
-});
-*/
+            this.getComponentForm().animateLayout(150);
+        });
+        
+        
 
         super.addSideMenu(res);
         
@@ -137,10 +110,18 @@ fab.addActionListener((ActionListener) (ActionEvent evt1) -> {
 fab.bindFabToContainer(this.getContentPane());
           ServiceProject sp=new ServiceProject();
         
-   
+
         for (Project project :  sp.getAllProjects()) {
 
-                  addItem(project,res);
+                  addItem(project,res,previous);
+            //Label l = new Label("Label " + i);
+            /*
+            Container C = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+            Label name = new Label(" Project Name : "+project.getName());
+            C.add(name);
+            cont18.add(C);
+*/
+            
         }
         
         
@@ -149,10 +130,14 @@ fab.bindFabToContainer(this.getContentPane());
         this.getToolbar().addCommandToLeftBar("Return", null, (evt) -> {
             new BackendForm(res).show();
         });
-        
+         getToolbar().addCommandToOverflowMenu("Archiver", null, (ActionListener) (ActionEvent evt) -> {
+
+             new ArchiverProjectForm(this, res).show();
+
+         });
     }
     
-   public void addItem(Project project,Resources res) {
+   public Container addItem(Project project,Resources res,Form previous) {
 
         
         Container C = new Container(new BoxLayout(BoxLayout.Y_AXIS));
@@ -165,7 +150,9 @@ fab.bindFabToContainer(this.getContentPane());
         Label end_date = new Label("  "+"End Date : "+project.getEnd_date());
         Label more = new Label("  "+" ");
         Label archiver = new Label("                                                                          ");
-        archiver.setTextPosition(LEFT);
+        Label stat = new Label("                                                                          ");
+        stat.setTextPosition(LEFT);
+ 
        
         
  //Graphic
@@ -179,6 +166,7 @@ fab.bindFabToContainer(this.getContentPane());
         Progress.getAllStyles().setFgColor(0xFFFFFF);
         more.getAllStyles().setFgColor(0x6967ce);
         archiver.getAllStyles().setFgColor(0x6967ce);
+        stat.getAllStyles().setFgColor(0xfa626b);
              
         
         C.getAllStyles().setBgColor(0x28afd0);
@@ -212,6 +200,7 @@ fab.bindFabToContainer(this.getContentPane());
         FontImage.setMaterialIcon(more, FontImage.MATERIAL_MORE_HORIZ);
         FontImage.setMaterialIcon(name, FontImage.MATERIAL_WORK);
         FontImage.setMaterialIcon(archiver, FontImage.MATERIAL_ARCHIVE);
+        FontImage.setMaterialIcon(stat, FontImage.MATERIAL_PIE_CHART);
         
         
         ServiceProject sp=new ServiceProject();
@@ -223,11 +212,17 @@ fab.bindFabToContainer(this.getContentPane());
              Dialog.show("Succès", "Le projet a été archivé avec succès", "OK", null);
              new AfficherProjectForm(this, res).show();
         });
-        getToolbar().addCommandToOverflowMenu("Archiver", null, (ActionListener) (ActionEvent evt) -> {
+       stat.addPointerPressedListener((ActionListener) (ActionEvent evt) -> {
+           
+           if (nbTsprint(project)!=0){
+           new BudgetPieChart(previous,res,project).show();
+           }
+           else {
+           Dialog.show("warning", "sprint introuvable", "OK", null);
+           }
+          
+        });
 
-             new ArchiverProjectForm(this, res).show();
-
-         });
        
         
    if (sp.ProgressProjects(project.getId()).equals(sp.CompletedProjects(project.getId())))
@@ -244,14 +239,24 @@ fab.bindFabToContainer(this.getContentPane());
         C.add(end_date);
         C1.add(more);
         C1.add(archiver);
+        C1.add(stat);
         C.add(C1);
         add(C);
  
-
+return C ;
     }
    
    
    
-   
+     private float nbTsprint(Project project) {
+    
+   int  j=0;
+   Servicesprint s=new Servicesprint();
+    for (Sprint Sprint :  s.FindSprints(project.getId())) {
+    j++;
+    
+    }
+    return j;
+    }
     
 }

@@ -5,6 +5,7 @@
  */
 package com.mycompany.myapp.forms;
 
+import com.codename1.components.FloatingHint;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.ui.Button;
 import static com.codename1.ui.Component.BOTTOM;
@@ -18,6 +19,7 @@ import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
+import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
@@ -39,153 +41,69 @@ public class EventEditForm extends BaseForm {
     
     public EventEditForm(Form previous ,Resources res ,Event EVT)  {
         
-    super("Modifier Event", BoxLayout.y());
-        
+        super(new BorderLayout());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
+        tb.setUIID("Container");
         getTitleArea().setUIID("Container");
-        setTitle("Modifier Event");
-        getContentPane().setScrollVisible(false);
-        
-        
-        super.addSideMenu(res);
-        
-                Image img = res.getImage("welcome-background.jpg");
-        if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
-            img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
-        }
-        ScaleImageLabel sl = new ScaleImageLabel(img);
-        sl.setUIID("BottomPad");
-        sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
 
-        
-                add(LayeredLayout.encloseIn(
-                sl
-        ));
-        
-         Container c = new Container(new BoxLayout(BoxLayout.Y_AXIS));
-            Label tit_L = new Label("  "+"Titre : ");
-            TextField tit = new TextField("",EVT.getTitreEvent());
-            
-            Label typ_L = new Label("  "+"Type : ");
-            TextField typ = new TextField("",EVT.getTypeEvent());
-            
-            Label cap_L = new Label("  "+"Capacité : ");
-            TextField cap = new TextField("",EVT.getNumeroEvent());
-            
-            Label start_date_L = new Label("  "+"Date de début : ");
-            Picker start_date = new Picker();
-            start_date.setDate(EVT.getDateEvent());
-            
-            Label end_date_L = new Label("  "+"Date fin : ");
-            Picker end_date = new Picker();
-            end_date.setDate(EVT.getEnddateEvent());
-            
-            Label img_L = new Label("  "+"Img : ");
-            TextField image = new TextField("",EVT.getImage_name());
-            
-            
-            Button btn = new Button("Valider");
-             c.add(tit_L);
-             c.add(tit);
-             c.add(typ_L);
-             c.add(typ);
-             c.add(cap_L);
-             c.add(cap);             
-             c.add(start_date_L);
-             c.add(start_date);
-             c.add(end_date_L);
-             c.add(end_date);
-             c.add(img_L);
-             c.add(image);
-             
-             c.add(btn);
-             add(c);
-          
-
-            show();
-            btn.addActionListener((ActionListener) (ActionEvent evt1) -> {
-          //Date dateS=start_date.getDate();//converting string into sql date
-          //Date datef=end_date.getDate();
-           String a=start_date.getDate().toString();
-                System.out.println(a);
-           String b=end_date.getDate().toString();
-                System.out.println(b);
-         
-                Event p=new Event(tit.getText(), typ.getText(),  Integer.parseInt(cap.getText()) ,start_date.getDate(), end_date.getDate(), image.getText());
-                ServiceEvent sp=new ServiceEvent();
-                 
-            
-                System.out.println(compare(start_date.getDate().toString(),end_date.getDate().toString()));
-                if(!tit.getText().equals("")&&!typ.getText().equals("")){
-                    
-                if(compare(start_date.getDate().toString(),end_date.getDate().toString())==-1){
-                    sp.updateEvent(p,EVT.getIdev());
-                    Dialog.show("Success","Done ! ", "OK",null);
+        tb.setBackCommand("", e -> previous.showBack());
+        setUIID("SignIn");
                 
-                }
-                       else{
-                Dialog.show("WARNING","vérifier date de création  ", "OK",null);
-                }
-                }
-                else{
-                 Dialog.show("WARNING"," verifié vos parametre ", "OK",null);
-                }
-
- 
-
-            });
+        TextField titre = new TextField(EVT.getTitreEvent(),"" , 20, TextField.ANY);
+        TextField type = new TextField(EVT.getTypeEvent(),"", 20, TextField.ANY);
+        TextField capa = new TextField(Integer.toString(EVT.getNumeroEvent()), "" , 20, TextField.ANY);
         
-        //Return
-        this.getToolbar().addCommandToLeftBar("Return", null, (evt) -> {
-            previous.showBack();
-        });
-    }
-    
-    
-    public  int compare(String Sd1, String Sd2) {
+        Picker dd = new Picker();
+        dd.setType(Display.PICKER_TYPE_CALENDAR);
+        //dd.setDate(EVT.getDateEvent());
+        Picker de = new Picker();
+        de.setType(Display.PICKER_TYPE_CALENDAR);
+        //de.setDate(EVT.getEnddateEvent());
         
-      try {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        TextField img = new TextField(EVT.getImage_name(), "" , 20, TextField.ANY);
 
-            String Sd2d = parseDate(Sd1,"", "MM-dd-yyyy");
-            String Sd2f = parseDate(Sd2,"", "MM-dd-yyyy");
-            Date d1 = formatter.parse(Sd2d);
-            Date d2 = formatter.parse(Sd2f);
-             if (d1 == null) return d2 == null ? 0 : -1;
-             if (d2 == null) return 1;
-             if (d1.getTime() < d2.getTime()) {
-                 return -1;
-             } else if (d1.getTime() > d2.getTime()) {
-                 return 1;
-             }
+        titre.setSingleLineTextArea(true);
+        img.setSingleLineTextArea(true);
+        capa.setSingleLineTextArea(true);
+        // confirmPassword.setSingleLineTextArea(false);
+        Button confirmer = new Button("Confirmer");
+        
+        
+        Container content = BoxLayout.encloseY(
+                new Label("Modifier Event", "LogoLabel"),
+                new FloatingHint(titre),
+                createLineSeparator(),
+                type,
+                createLineSeparator(),
+                new FloatingHint(capa),
+                createLineSeparator(),
+                dd,
+                createLineSeparator(),
+                de,
+                createLineSeparator(),
+                new FloatingHint(img),
+                createLineSeparator()
+        );
+        content.setScrollableY(true);
+        add(BorderLayout.CENTER, content);
+        add(BorderLayout.SOUTH, BoxLayout.encloseY(
+                confirmer
+              //  FlowLayout.encloseCenter(alreadHaveAnAccount, signIn)
+        ));
+        confirmer.requestFocus();
+        confirmer.addActionListener(e ->
+        {
+                  
+         Event evt = new Event(EVT.getIdev() ,titre.getText() , Integer.parseInt(capa.getText()) ,type.getText()  , dd.getDate(), de.getDate(), img.getText() ); 
+            System.out.println(evt);
+         ServiceEvent v = new ServiceEvent();
+         v.updateEvent(evt);
+         new EventListForm(previous,res,TOP).show();           
         }
-         catch (ParseException e1) {
-         e1.printStackTrace();
-         }
-            return 0;
-    }
+        
+        );
     
     
-    public String parseDate(String dateTime,String inputPattern, String outputPattern) throws ParseException {
-
-       SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
-       SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
-
-       Date date = inputFormat.parse(dateTime);
-       String str = outputFormat.format(date);
-
-       return str;
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    } 
 }

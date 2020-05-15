@@ -29,6 +29,7 @@ public class EventForm extends BaseForm {
 
         Button btnAddEvent = new Button("Add Event");
         Button btnEventList = new Button("Event List");
+        Button btnStatEvent = new Button("Statistique Event");
         Button btnPlist = new Button("Participants List");
         
         Toolbar tb = new Toolbar(true);
@@ -65,11 +66,15 @@ public class EventForm extends BaseForm {
             new EventAddForm(EventForm.this, res).show();
         });
             
+            btnStatEvent.addActionListener((evt) -> {
+            new EventStatForm(previous, res).show();
+        });
+            
             btnPlist.addActionListener((evt) -> {
             new ParticipantListForm(this, res).show();
         });
 
-        this.addAll(new Label("Choose an option :"), btnAddEvent, btnEventList, btnPlist);
+        this.addAll(new Label("Choose an option :"), btnAddEvent, btnEventList,btnStatEvent, btnPlist);
     }
     
         

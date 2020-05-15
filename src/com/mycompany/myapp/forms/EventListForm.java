@@ -91,11 +91,13 @@ public class EventListForm extends BaseForm {
         img = new ImageViewer(res.getImage("Software-Git.png"));
         Container C2 = new Container(new BoxLayout(BoxLayout.Y_AXIS));
         Label ide = new Label(Integer.toString(e.getIdev()));
+        Label txt = new Label("Titres d'events :");
         Label tit = new Label(e.getTitreEvent());
         Label typ = new Label(e.getTypeEvent());
+        Label image = new Label(e.getImage_name());
         Label num = new Label(Integer.toString(e.getNumeroEvent()));
-        Label de = new Label("  "+"Date : "+e.getDateEvent());
-        Label df = new Label("  "+"End Date : "+e.getEnddateEvent());
+        Label de = new Label(""+"Date : "+e.getDateEvent());
+        Label df = new Label(""+"End Date : "+e.getEnddateEvent());
 
         tit.addPointerPressedListener((ActionListener) (ActionEvent evt) -> {
            
@@ -106,10 +108,11 @@ public class EventListForm extends BaseForm {
           dlg.add(BorderLayout.CENTER, BoxLayout.encloseY(new SpanLabel("Idev :" + ide.getText() + " \n "
                     + "Titre : " + tit.getText() + " \n "
                     + "Type : " + typ.getText() + " \n "
-                    + "Titre : " + num.getText() + " \n "
-                    + "" + de.getText() + " \n "
-                    + "" + df.getText() + " \n "
-                    ), delete, close));
+                    + "Numero : " + num.getText() + " \n "
+                    + "" + "15/05/2020" + " \n "
+                    + "" + "15/05/2020" + " \n "
+                    + "Image : " + image.getText() + " \n "
+                    ), delete, edit ,close));
           dlg.show(TOP, BOTTOM, LEFT, RIGHT);
                 
         
@@ -123,10 +126,10 @@ public class EventListForm extends BaseForm {
                         
                         removeComponent(dlg);
                                 });
-           
+                       
             delete.addActionListener(
                     (ee) -> {
-                               if (new ServiceEvent().deleteEvent( e.getIdev()) )
+                               if (new ServiceEvent().deleteEvent(e))
                                {
                                  Dialog.show("Alert", "Event supprimée", new Command("OK"));
                                } else{
@@ -142,20 +145,16 @@ public class EventListForm extends BaseForm {
                                 });
                     
              edit.addActionListener(
-                     (ActionEvent ee) -> {
-                new EventEditForm(previous, res, EVT).show();
+                     (ee) -> {
+                new EventEditForm(previous, res, e).show();
         });  
             
         });
         
 
-        
-           
-        
-                
-                 
+        C2.add(txt);  
         C2.add(tit);
-        C2.add(typ);
+        
         
         
         C1.add(img);

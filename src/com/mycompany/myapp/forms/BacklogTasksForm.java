@@ -5,10 +5,13 @@
  */
 package com.mycompany.myapp.forms;
 
+import com.codename1.components.FloatingActionButton;
 import com.codename1.components.ImageViewer;
 import com.codename1.components.InteractionDialog;
 import com.codename1.components.ScaleImageLabel;
+import com.codename1.components.ShareButton;
 import com.codename1.components.SpanLabel;
+import com.codename1.io.FileSystemStorage;
 import com.codename1.ui.Button;
 import com.codename1.ui.Command;
 import static com.codename1.ui.Component.BOTTOM;
@@ -18,6 +21,7 @@ import static com.codename1.ui.Component.TOP;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
+import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
@@ -56,6 +60,7 @@ public class BacklogTasksForm extends BaseForm {
         if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
             img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
         }
+
         ScaleImageLabel sl = new ScaleImageLabel(img);
         sl.setUIID("BottomPad");
         sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
@@ -75,6 +80,20 @@ public class BacklogTasksForm extends BaseForm {
                             btn = new Button(new Command("taches", t.getId()))
                     , this, id_backlog, previous);
         }
+        
+        FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ACCESSIBILITY);
+        fab.getAllStyles().setBgColor(0x5ed84f);
+        fab.addActionListener((ActionListener) (ActionEvent evt1) -> {
+
+
+                   new BacklogStatForm().createPieChartForm1(res,previous,id_backlog,1, res).show();
+
+
+                    });
+        //fab.bindFabToContainer(this.getContentPane());
+        //fab.createSubFAB(FontImage.MATERIAL_PEOPLE, "");
+        //fab.createSubFAB(FontImage.MATERIAL_IMPORT_CONTACTS, "");
+        fab.bindFabToContainer(this.getContentPane());
 
        
         this.show();
@@ -120,6 +139,21 @@ public class BacklogTasksForm extends BaseForm {
             
             
                 dlg = new InteractionDialog("Tache",  new BorderLayout());
+                        ShareButton sb = new ShareButton();
+        sb.setText ("Partager");
+       
+        sb.setTextToShare (task_name.getText());
+        sb.setTextToShare ("Id :" + task_id.getText() + " \n "
+                    + "Titre : " + task_name.getText() + " \n "
+                    + "Story points : "+ story_points.getText()+ " \n "
+                    + "Priorite : " + priority.getText() + " \n "
+                    + "Archive : "+ archived.getText() + " \n "
+                    + "Sprint : "+ sprint_name.getText()+ " \n "
+                    + "Description Fonctionnele : "+ description_foncti.getText()+ " \n " 
+                    + "Description Technique : "+ description_technique.getText()+ " \n ");
+        String imageFile = FileSystemStorage.getInstance().getAppHomePath() + "Software-Git.png" ;
+
+        sb.setImageToShare(imageFile, "image/png");
         
           dlg.add(BorderLayout.CENTER, BoxLayout.encloseY(new SpanLabel("Id :" + task_id.getText() + " \n "
                     + "Titre : " + task_name.getText() + " \n "
@@ -128,7 +162,7 @@ public class BacklogTasksForm extends BaseForm {
                     + "Archive : "+ archived.getText() + " \n "
                     + "Sprint : "+ sprint_name.getText()+ " \n "
                     + "Description Fonctionnele : "+ description_foncti.getText()+ " \n " 
-                    + "Description Technique : "+ description_technique.getText()+ " \n "  ), delete, close));
+                    + "Description Technique : "+ description_technique.getText()+ " \n "  ), delete, close, sb));
           dlg.show(TOP, BOTTOM, LEFT, RIGHT);
                 
         

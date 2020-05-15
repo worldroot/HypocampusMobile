@@ -37,7 +37,7 @@ public class ServiceTask {
     }
     
     public ArrayList<Task> getAllTasks(int id_backlog) {
-        String url = Statics.BASE_URL + "/ProjetPi/Hypocampus/web/app_dev.php/api/ProjectBacklog/view/"+id_backlog;
+        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/ProjectBacklog/view/"+id_backlog;
 
         request.setUrl(url);
         request.setPost(false);
@@ -99,7 +99,7 @@ public class ServiceTask {
     }
     
     public boolean deleteTask(int id_b, int id) {
-        String url = Statics.BASE_URL + "/ProjetPi/Hypocampus/web/app_dev.php/api/ProjectBacklog/view/"+id_b+"/task/remove/"+id;
+        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/ProjectBacklog/view/"+id_b+"/task/remove/"+id;
 
         request.setUrl(url);
         request.setPost(false);
@@ -117,7 +117,7 @@ public class ServiceTask {
         }
     
     public boolean addTask(Task task) {
-         String url = Statics.BASE_URL + "/ProjetPi/Hypocampus/web/app_dev.php/api/ProjectBacklog/view/" + task.getBacklog_id() +""
+         String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/ProjectBacklog/view/" + task.getBacklog_id() +""
                  + "/task/add/" + task.getTitle() + "/" + task.getStory_points() + "/" + task.getState() + "/" + task.getPriority() + "/" +task.getDescription_fonctionnel()+"/"
                  +task.getSprint_id()+"/"+task.getFinished_date();
 

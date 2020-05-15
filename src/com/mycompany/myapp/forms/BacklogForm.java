@@ -6,7 +6,11 @@
 package com.mycompany.myapp.forms;
 
 import com.codename1.components.ScaleImageLabel;
+import com.codename1.components.ShareButton;
 import com.codename1.components.SpanLabel;
+import com.codename1.io.FileSystemStorage;
+import com.codename1.messaging.Message;
+import com.codename1.notifications.LocalNotification;
 import com.codename1.ui.Button;
 import static com.codename1.ui.Component.BOTTOM;
 import com.codename1.ui.Display;
@@ -34,7 +38,7 @@ public class BacklogForm extends BaseForm {
 
         Button btnAddBacklog = new Button("Add Backlog");
         Button btnBacklogList = new Button("Backlog List");
-        
+        Button btnNotif = new Button("Notif");
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
          
@@ -60,16 +64,27 @@ public class BacklogForm extends BaseForm {
                 add(LayeredLayout.encloseIn(
                 sl
         ));
-
+         //////////////////////
         this.getToolbar().addCommandToLeftBar("Return", null, (evt) -> {
             previous.showBack();
+        });
+        
+        btnAddBacklog.addActionListener((evt) -> {
+            new AjouterBacklogForm(this, res).show();
         });
         
                 btnBacklogList.addActionListener((evt) -> {
             new BacklogListForm(this, res).show();
         });
 
-        this.addAll(new Label("Choose an option :"), btnAddBacklog, btnBacklogList);
+        btnNotif.addActionListener((evt) -> {
+                //Message m = new Message("Forum Created");
+
+                   // Display.getInstance().sendMessage(new String[] {"mohamedamine.mbarki@esprit.tn"}, "New sujet", m);
+                    
+                    
+        });
+        this.addAll(new Label("Choose an option :"), btnAddBacklog, btnBacklogList, btnNotif);
     }
     
 }

@@ -34,7 +34,7 @@ public class ServiceBacklog {
     
     
         public ArrayList<Backlog> getAllBacklogs() {
-        String url = Statics.BASE_URL + "/ProjetPi/Hypocampus/web/app_dev.php/api/ProjectBacklog/index";
+        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/ProjectBacklog/index";
 
         request.setUrl(url);
         request.setPost(false);
@@ -78,5 +78,22 @@ public class ServiceBacklog {
         }
 
         return backlogs;
+    }
+    
+    public boolean ajouterBacklog(Backlog b){
+    String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/ProjectBacklog/add/"+b.getProject_id();
+
+
+        request.setUrl(url);
+        request.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK
+                request.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return responseResult;
     }
 }

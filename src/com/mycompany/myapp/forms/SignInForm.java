@@ -22,6 +22,7 @@ package com.mycompany.myapp.forms;
 import com.codename1.components.FloatingHint;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
@@ -29,6 +30,9 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.Resources;
+import com.mycompany.myapp.models.User;
+import com.mycompany.myapp.services.ServiceUser;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 /**
  * Sign in UI
@@ -71,7 +75,34 @@ public class SignInForm extends BaseForm {
         content.setScrollableY(true);
         add(BorderLayout.SOUTH, content);
         signIn.requestFocus();
-        signIn.addActionListener(e -> new BackendForm(res).show());
+        signIn.addActionListener(e -> {
+			ServiceUser su = new ServiceUser();
+			User u = new User();
+			
+			u.setUsername(username.getText());
+			String inputPassword = password.getText();
+			u = su.loginUser(u);
+			if(!u.getRoles().equals("null")) {
+				if(BCrypt.checkpw(inputPassword, u.getPassword())) {
+					if(u.getRoles().equals("[ROLE_ADMIN]")) {
+						new BackBackOffForm(res).show();
+					} else {
+						new BackendForm(res).show();
+					}
+				} 
+				else {
+					Dialog.show("Log In","Username or password incorrect ", "OK",null);
+
+				}
+			}
+			else {
+				Dialog.show("Log In","Username or password incorrect ", "OK",null);
+
+			}
+			
+			
+			
+		});
     }
     
 }

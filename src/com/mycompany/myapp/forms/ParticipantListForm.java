@@ -129,6 +129,9 @@ public class ParticipantListForm extends BaseForm{
                         dlg.dispose();
                         dlg.remove();
                         close.remove();
+                        this.refreshTheme();
+                        this_form.repaint();
+                        new ParticipantListForm(previous, res).show();
                         
                         removeComponent(dlg);
                                 });

@@ -8,6 +8,7 @@ package com.mycompany.myapp.forms;
 import com.codename1.components.FloatingHint;
 import com.codename1.l10n.DateFormat;
 import com.codename1.l10n.DateFormatPatterns;
+import com.codename1.messaging.Message;
 import com.codename1.ui.Button;
 import com.codename1.ui.Command;
 import com.codename1.ui.Container;
@@ -68,6 +69,7 @@ public class EventAddForm extends BaseForm{
         Button confirmer = new Button("Confirmer");
         
         
+        
         Container content = BoxLayout.encloseY(
                 new Label("Ajout Event", "LogoLabel"),
                 new FloatingHint(titre),
@@ -90,13 +92,17 @@ public class EventAddForm extends BaseForm{
               //  FlowLayout.encloseCenter(alreadHaveAnAccount, signIn)
         ));
         confirmer.requestFocus();
+        
+        
         confirmer.addActionListener(e ->
         {
                   
          Event evt = new Event(titre.getText(), type.getText() , Integer.parseInt(capa.getText()), dd.getDate(), de.getDate(), img.getText() );  
          ServiceEvent v = new ServiceEvent();
          v.addEvent(evt);
-         new EventForm(previous,res).show();           
+         new EventForm(previous,res).show(); 
+         Message m = new Message("Forum Created");
+            Display.getInstance().sendMessage(new String[] {"boughzala.ghassen@gmail.com"}, "New sujet"+ titre.getText(), m);
         }
         
         );

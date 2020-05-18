@@ -76,27 +76,28 @@ public class ServiceEvent {
             List<Map<String, Object>> list = (List<Map<String, Object>>) eventListJson.get("root");
             for (Map<String, Object> obj : list) {
                 Event e = new Event();
-                int id = (int)Float.parseFloat(obj.get("idev").toString());
+                int id = (int)Float.parseFloat(obj.get("id_ev").toString());
                 e.setIdev(id);
-                String titre = obj.get("titreEvent").toString();
+                String titre = obj.get("titre_event").toString();
                 e.setTitreEvent(titre);
-                int cap = (int)Float.parseFloat(obj.get("numeroEvent").toString());
+                int cap = (int)Float.parseFloat(obj.get("numero_event").toString());
                 e.setNumeroEvent(cap);
-                String type = obj.get("typeEvent").toString();
+                String type = obj.get("type_event").toString();
                 e.setTypeEvent(type);
-                //String image = obj.get("image_name").toString();
-                //e.setImage_name(image);
-/*                
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 
-                String start_date_S=obj.get("DateEvent").toString();
+                String image = obj.get("image_name").toString();
+                e.setImage_name(image);
+                
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		
+                String start_date_S=obj.get("date_event").toString();
                 Date start_date = formatter.parse(start_date_S); 
                 e.setDateEvent(start_date);
 
-                String endDate_S=obj.get("enddateEvent ").toString();
+                String endDate_S=obj.get("enddate_event").toString();
                 Date endDate = formatter.parse(endDate_S);
                 e.setEnddateEvent(endDate);
- */               
+                
                
                 events.add(e);
                 //Map<String, Object> project = (Map<String, Object>) obj.get("project");
@@ -105,7 +106,12 @@ public class ServiceEvent {
             }
 
         } catch (IOException ex) {
-        } 
+            
+        } catch (ParseException e1) {
+         e1.printStackTrace();
+         }
+     
+        
 
         return events;
     }

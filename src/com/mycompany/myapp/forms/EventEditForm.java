@@ -56,10 +56,10 @@ public class EventEditForm extends BaseForm {
         
         Picker dd = new Picker();
         dd.setType(Display.PICKER_TYPE_CALENDAR);
-        //dd.setDate(EVT.getDateEvent());
+        dd.setDate(EVT.getDateEvent());
         Picker de = new Picker();
         de.setType(Display.PICKER_TYPE_CALENDAR);
-        //de.setDate(EVT.getEnddateEvent());
+        de.setDate(EVT.getEnddateEvent());
         
         TextField img = new TextField(EVT.getImage_name(), "" , 20, TextField.ANY);
 

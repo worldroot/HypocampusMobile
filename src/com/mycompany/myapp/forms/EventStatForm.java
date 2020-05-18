@@ -92,7 +92,22 @@ public class EventStatForm extends BaseForm {
        
         
         // Generate the values
-        double[] values = new double[]{li.get(0).doubleValue()/29, li.get(1).doubleValue()/29,li.get(2).doubleValue()/29};
+      
+       String valeur1=Double.toString(li.get(0).doubleValue()/li.get(3));
+       String role = valeur1.substring(0,5);
+       Double v1=Double.parseDouble(role);
+       
+       String valeur2=Double.toString(li.get(1).doubleValue()/li.get(3));
+       String role2 = valeur2.substring(0,5);
+       Double v2=Double.parseDouble(role2);
+       
+       String valeur3=Double.toString(li.get(1).doubleValue()/li.get(3));
+       String role3 = valeur3.substring(0,5);
+       Double v3=Double.parseDouble(role3);
+        
+        double[] values = new double[]{v1, v2, v3};
+
+        //double[] values = new double[]{li.get(0).doubleValue()/li.get(3), li.get(1).doubleValue()/li.get(3),li.get(2).doubleValue()/li.get(3)};
         System.out.println("Values "+li.get(0).doubleValue()/29);
         
         

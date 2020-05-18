@@ -8,7 +8,9 @@ package com.mycompany.myapp.forms;
 import com.codename1.components.ImageViewer;
 import com.codename1.components.InteractionDialog;
 import com.codename1.components.ScaleImageLabel;
+import com.codename1.components.ShareButton;
 import com.codename1.components.SpanLabel;
+import com.codename1.io.FileSystemStorage;
 import com.codename1.ui.Button;
 import com.codename1.ui.Command;
 import static com.codename1.ui.Component.BOTTOM;
@@ -23,6 +25,8 @@ import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
@@ -45,7 +49,7 @@ public class EventListForm extends BaseForm {
         setToolbar(tb);
          
         getTitleArea().setUIID("Container");
-        setTitle("Event");
+        setTitle("Events List");
         getContentPane().setScrollVisible(false);
 
         super.addSideMenu(res);
@@ -57,9 +61,19 @@ public class EventListForm extends BaseForm {
         ScaleImageLabel sl = new ScaleImageLabel(img);
         sl.setUIID("BottomPad");
         sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
+
+        Label facebook = new Label("", res.getImage(""), "BottomPad");
+        facebook.setTextPosition(BOTTOM);
+        
+        
+        
+        sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
         
                 add(LayeredLayout.encloseIn(
-                sl
+                sl, 
+                BorderLayout.south(
+                    GridLayout.encloseIn(3, 
+                            facebook) )
         ));
 
        // this.add(new SpanLabel(new ServiceEvent().getAllEvents().toString()));
@@ -71,6 +85,7 @@ public class EventListForm extends BaseForm {
                             btn = new Button(new Command("Events", t.getIdev()))
                     , this, idev, previous);
         }
+        
         this.getToolbar().addCommandToLeftBar("Return", null, (evt) -> {
             previous.showBack();
         });
@@ -84,6 +99,22 @@ public class EventListForm extends BaseForm {
        Button delete = new Button("Delete");
        Button edit = new Button("Edit");
        
+       //Button btnpartage= new Button("Partage fb");
+        ShareButton btnpartage = new ShareButton();
+        btnpartage.setText ("Partager");
+       
+        btnpartage.setTextToShare (e.getTitreEvent());
+        btnpartage.setTextToShare ("Event titre: " + e.getTitreEvent()+ " \n "
+                    + "Event Type : "+ e.getTypeEvent()+ " \n "
+                    + "Capacité : "+ e.getNumeroEvent()+ " \n "
+                    + "Start Date : " + e.getDateEvent()+ " \n "
+                    + "End Date : "+ e.getEnddateEvent() + " \n "
+                   
+                    );
+        String imageFile = FileSystemStorage.getInstance().getAppHomePath() + "Software-Git.png" ;
+
+        btnpartage.setImageToShare(imageFile, "image/png");
+       
 
         ImageViewer img = null;
         Container C1 = new Container(new BoxLayout(BoxLayout.X_AXIS));
@@ -91,7 +122,7 @@ public class EventListForm extends BaseForm {
         img = new ImageViewer(res.getImage("Software-Git.png"));
         Container C2 = new Container(new BoxLayout(BoxLayout.Y_AXIS));
         Label ide = new Label(Integer.toString(e.getIdev()));
-        Label txt = new Label("Titres d'events :");
+       
         Label tit = new Label(e.getTitreEvent());
         Label typ = new Label(e.getTypeEvent());
         Label image = new Label(e.getImage_name());
@@ -109,10 +140,10 @@ public class EventListForm extends BaseForm {
                     + "Titre : " + tit.getText() + " \n "
                     + "Type : " + typ.getText() + " \n "
                     + "Numero : " + num.getText() + " \n "
-                    + "" + "15/05/2020" + " \n "
-                    + "" + "15/05/2020" + " \n "
+                    + "Date debut: " + e.getDateEvent() + " \n "
+                    + "Date fin :" + e.getEnddateEvent() + " \n "
                     + "Image : " + image.getText() + " \n "
-                    ), delete, edit ,close));
+                    ), delete, edit ,close, btnpartage));
           dlg.show(TOP, BOTTOM, LEFT, RIGHT);
                 
         
@@ -152,7 +183,7 @@ public class EventListForm extends BaseForm {
         });
         
 
-        C2.add(txt);  
+          
         C2.add(tit);
         
         

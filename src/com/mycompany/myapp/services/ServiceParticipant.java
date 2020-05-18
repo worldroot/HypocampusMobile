@@ -72,8 +72,8 @@ public class ServiceParticipant {
                 e.setEmail(email);
                 String pass = obj.get("passwordp").toString();
                 e.setPasswordp(pass);
-                int rev = (int)Float.parseFloat(obj.get("review").toString());
-                e.setReview(rev);
+//                int rev = (int)Float.parseFloat(obj.get("review").toString());
+//                e.setReview(rev);
                 
                 partss.add(e);
                 //Map<String, Object> project = (Map<String, Object>) obj.get("project");

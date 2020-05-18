@@ -58,7 +58,7 @@ public class BudgetPieChart extends  BaseForm {
         
         super.addSideMenu(res);
         
-                Image img = res.getImage("welcome-background.jpg");
+                Image img = res.getImage("planning-projet.jpg");
         if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
             img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
         }

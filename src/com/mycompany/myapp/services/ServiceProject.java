@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.codename1.util.DateUtil;
+import com.mycompany.myapp.models.User;
 
 
 
@@ -42,6 +43,7 @@ public class ServiceProject {
     private boolean responseResult;
     public boolean resultOK;
     public ArrayList<Project> Projects;
+    public ArrayList<User> Projects_user;
 
     public ServiceProject() {
         request = DataSource.getInstance().getRequest();
@@ -65,7 +67,7 @@ public class ServiceProject {
         return Projects;
     }
         
-        
+
     public ArrayList<Project> FindProjects(int id) {
         String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/Project/More/"+id;
 
@@ -138,6 +140,7 @@ public class ServiceProject {
 
         return Projects;
     }
+
     //hhhhh
     
        public String  find_(String a)
@@ -317,6 +320,58 @@ public class ServiceProject {
 
        return str;
 }
-      
+  
+
+
+
+
+
+
+        //user
+     public ArrayList<User> getAllProjects_user() {
+        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/Project/afficher_user";
+
+        request.setUrl(url);
+        request.setPost(false);
+        request.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                Projects_user = parseProjects_user(new String(request.getResponseData()));
+                request.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return Projects_user;
+    }
+     
+    public ArrayList<User> parseProjects_user(String jsonText)  {
+        try {
+            Projects_user = new ArrayList<>();
+            Project p = new Project();
+            JSONParser jp = new JSONParser();
+            
+           //String s = "["+jsonText+"]";
+            Map<String, Object> ProjectListJson = jp.parseJSON(new CharArrayReader(find_(jsonText).toCharArray()));
+            List<Map<String, Object>> list = (List<Map<String, Object>>) ProjectListJson.get("root");
+            for (Map<String, Object> obj : list) {
+                int id = (int)Float.parseFloat(obj.get("id").toString());
+               String name=obj.get("username").toString();
+         
+                String email=obj.get("email").toString();
+                String password=obj.get("password").toString();
+                String roles=obj.get("roles").toString();
+             
+
+                Projects_user.add(new User(name,password,roles,email));
+            }
+
+
+        } catch (IOException ex) {
+        }
+
+
+        return Projects_user;
+    }     
 
 }

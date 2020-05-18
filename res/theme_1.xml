@@ -18,6 +18,8 @@
     <image name="news-tab-down.png" type="multi"  />
     <image name="on-off-off.png" type="multi"  />
     <image name="on-off-on.png" type="multi"  />
+    <image name="planning-projet.jpg"  />
+    <image name="planning-schema-concept.jpg"  />
     <image name="profile-background.jpg"  />
     <image name="profile-pic.jpg" type="multi"  />
     <image name="signin-background.jpg"  />
@@ -255,18 +257,16 @@
         <val key="SkipButton.transparency" value="0" />
         <val key="StatusBarSideMenu.margin" value="0,0,0,0" />
         <val key="StatusBarSideMenu.padding" value="0,0,0,0" />
-        <val key="TextField.align" value="4" />
         <border key="TextField.border" type="empty" />
-        <val key="TextField.fgColor" value="ffffff" />
-        <val key="TextField.margin" value="0,0,0,0" />
+        <val key="TextField.margin" value="0.0,0.0,0.0,0.0" />
         <val key="TextField.padUnit" value="2,2,2,2" />
-        <val key="TextField.padding" value="2,2,2,2" />
+        <val key="TextField.padding" value="2.0,2.0,2.0,2.0" />
         <val key="TextField.sel#align" value="4" />
         <border key="TextField.sel#border" type="empty" />
         <val key="TextField.sel#fgColor" value="ffffff" />
-        <val key="TextField.sel#margin" value="0,0,0,0" />
+        <val key="TextField.sel#margin" value="0.0,0.0,0.0,0.0" />
         <val key="TextField.sel#padUnit" value="2,2,2,2" />
-        <val key="TextField.sel#padding" value="3,3,2,2" />
+        <val key="TextField.sel#padding" value="3.0,3.0,2.0,2.0" />
         <val key="TextField.sel#transparency" value="0" />
         <val key="TextField.transparency" value="0" />
         <val key="TextFieldBlack.align" value="3" />

@@ -7,7 +7,13 @@ package com.mycompany.myapp.forms;
 
 import com.codename1.components.FloatingActionButton;
 import com.codename1.components.ScaleImageLabel;
+import com.codename1.components.ShareButton;
 import com.codename1.components.SpanLabel;
+import com.codename1.io.ConnectionRequest;
+import com.codename1.io.File;
+import com.codename1.io.FileSystemStorage;
+import com.codename1.io.NetworkManager;
+import com.codename1.io.Storage;
 import com.codename1.ui.Button;
 import static com.codename1.ui.Component.BOTTOM;
 import com.codename1.ui.Container;
@@ -30,6 +36,14 @@ import com.codename1.ui.util.Resources;
 import com.mycompany.myapp.models.Project;
 import com.mycompany.myapp.services.ServiceProject;
 import com.mycompany.myapp.services.Servicesprint;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.OutputStream;
 
 /**
  *
@@ -49,7 +63,7 @@ public class MoreAfficherProjectForm  extends  BaseForm{
         
         super.addSideMenu(res);
         
-                Image img = res.getImage("welcome-background.jpg");
+                Image img = res.getImage("planning-projet.jpg");
         if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
             img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
         }
@@ -120,6 +134,21 @@ fab.bindFabToContainer(this.getContentPane());
         btnSprint.addActionListener((evt) -> {
             new AfficherSprintForm(this,res,project).show();
         });
+        //Button btnpartage= new Button("Partage fb");
+        ShareButton btnpartage = new ShareButton();
+        btnpartage.setText ("Partager");
+       
+        btnpartage.setTextToShare (project.getName());
+        btnpartage.setTextToShare ("Project Name: " + project.getName() + " \n "
+                    + "Employee Name : "+ project.getOwner()+ " \n "
+                    + "Start Date : " + project.getStart_date() + " \n "
+                    + "End Date : "+ project.getEnd_date() + " \n "
+                    + "Description: "+ project.getDescription()+ " \n "
+                    );
+        String imageFile = FileSystemStorage.getInstance().getAppHomePath() + "Software-Git.png" ;
+
+        btnpartage.setImageToShare(imageFile, "image/png");
+
  //Graphic
 
   Font f = Font.createSystemFont(Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_MEDIUM);
@@ -181,9 +210,67 @@ fab.bindFabToContainer(this.getContentPane());
         C.add(end_date);
         C.add(description);
         C.add(btnSprint);
+        C.add(btnpartage);
         
         add(C);
  
 
-    }  
+    } 
+     /*
+     void pdf(Project project)
+     {
+
+try {
+           //Path 
+         OutputStream file = new creatStorageut(new File(" "));
+
+
+
+            Document document = new Document();
+
+            PdfWriter.getInstance(document, file);
+           
+
+            document.open();
+             document.add(new Paragraph("------------------------------------------------------------BIENVENU-------------------------------------------------------"));
+             document.add(new Paragraph("Project Name :"+ project.getName()));
+             //System.out.println(sP.getById(m.getId()));
+             document.add(new Paragraph("**************************************************************************"));
+             document.add(new Paragraph(" Employee Name:  "+project.getOwner()));
+             document.add(new Paragraph(" Start Date:  "+project.getStart_date()));
+             document.add(new Paragraph(" End Date:  "+project.getEnd_date()));
+             document.add(new Paragraph("*************"
+                                       + "**************************"));
+             document.add(new Paragraph(" Description:  "+project.getDescription()));
+             
+*
+             PdfPTable my_first_table = new PdfPTable(3);
+             PdfPCell table_cell;
+             table_cell=new PdfPCell(new Phrase("aza"));
+              my_first_table.addCell(table_cell);
+              table_cell=new PdfPCell(new Phrase("zaazd"));
+               my_first_table.addCell(table_cell);
+               table_cell=new PdfPCell(new Phrase(5));
+                my_first_table.addCell(table_cell);
+        
+             // my_first_table.addCell(table_cell);
+              // document.add(new Paragraph(getquantite(4)));
+
+           document.add( my_first_table);    
+
+  *
+            document.close();
+             
+            file.close();
+
+
+        } catch (Exception e) {
+
+
+            e.printStackTrace();
+
+
+     }
+     }
+*/
 }

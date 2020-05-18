@@ -7,6 +7,7 @@ package com.mycompany.myapp.forms;
 
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.ui.Button;
+import com.codename1.ui.ComboBox;
 import static com.codename1.ui.Component.BOTTOM;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
@@ -24,6 +25,7 @@ import com.codename1.ui.plaf.Style;
 import com.codename1.ui.spinner.Picker;
 import com.codename1.ui.util.Resources;
 import com.mycompany.myapp.models.Project;
+import com.mycompany.myapp.models.User;
 import com.mycompany.myapp.services.ServiceProject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +37,7 @@ import java.util.Map;
  * @author 21694
  */
 public class AjouterProjectForm extends  BaseForm {
-
+   ComboBox<User> owner;
     public AjouterProjectForm(Form previous,Resources res)  {
  super("ajouter un projet", BoxLayout.y());
         
@@ -48,7 +50,7 @@ public class AjouterProjectForm extends  BaseForm {
         
         super.addSideMenu(res);
         
-                Image img = res.getImage("welcome-background.jpg");
+               Image img = res.getImage("planning-projet.jpg");
         if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
             img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
         }
@@ -69,7 +71,6 @@ public class AjouterProjectForm extends  BaseForm {
             Label name_L = new Label("  "+"Nom du projet : ");
             TextField name = new TextField("", "Nom");
             Label owner_L = new Label("  "+"Propriétaire : ");
-            TextField owner = new TextField("", "owner");
             Label start_date_L = new Label("  "+"Date de début : ");
             Picker start_date = new Picker();
             Label end_date_L = new Label("  "+"Date fin : ");
@@ -77,6 +78,12 @@ public class AjouterProjectForm extends  BaseForm {
             Label description_L = new Label("  "+"Description : ");
             TextField description = new TextField("", "description");
             Button btn = new Button("Valider");
+            owner = new ComboBox();
+	    ServiceProject s = new ServiceProject();
+            for ( User T : s.getAllProjects_user()) {
+	          owner.addItem(T);
+		}
+          
              //SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
              //Date endDate = formatter.parse(end_date.getText()); 
              //Date endDate2 = formatter.parse(end_date.getText()); 
@@ -103,12 +110,12 @@ public class AjouterProjectForm extends  BaseForm {
            String b=end_date.getDate().toString();
             System.out.println(b);
          
-                Project p=new Project(name.getText(),owner.getText(),start_date.getDate(),end_date.getDate(),description.getText(),0);
+                Project p=new Project(name.getText(),owner.getSelectedItem().getUsername(),start_date.getDate(),end_date.getDate(),description.getText(),0);
                 ServiceProject sp=new ServiceProject();
                  
             
                 System.out.println(compare(start_date.getDate().toString(),end_date.getDate().toString()));
-                if(!name.getText().equals("")&&!owner.getText().equals("")&&!description.getText().equals("")){
+                if(!name.getText().equals("")&&!description.getText().equals("")){
                     
                 if(compare(start_date.getDate().toString(),end_date.getDate().toString())==-1){
                 sp.ajouterProject(p);

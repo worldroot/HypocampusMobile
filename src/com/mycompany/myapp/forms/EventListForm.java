@@ -154,6 +154,9 @@ public class EventListForm extends BaseForm {
                         dlg.dispose();
                         dlg.remove();
                         close.remove();
+                        this.refreshTheme();
+                        this_form.repaint();
+                        new EventListForm(previous, res, idev).show();
                         
                         removeComponent(dlg);
                                 });

@@ -71,11 +71,13 @@ public class BackBackOffForm extends BaseForm {
         Button btnEntreprise = new Button("Entreprise Menu");
         
         btnEntreprise.addActionListener((evt) -> {
+            new EntrepriseForm(this, res).show();
         });
 		
 		Button btnUsers = new Button("Users Menu");
         
         btnUsers.addActionListener((evt) -> {
+			new UserForm(this, res).show();
         });
 
         this.addAll(new Label("Choose an option :"), btnEntreprise, btnUsers); 

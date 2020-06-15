@@ -5,6 +5,9 @@
  */
 package com.mycompany.myapp.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
@@ -13,114 +16,52 @@ import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.events.ActionListener;
-import com.mycompany.myapp.models.User;
 import com.mycompany.myapp.utils.DataSource;
 import com.mycompany.myapp.utils.Statics;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import com.codename1.util.DateUtil;
+import com.mycompany.myapp.models.Entreprise;
 
 /**
  *
  * @author Houcem
  */
-public class ServiceUser {
+public class ServiceEntreprise {
 	private ConnectionRequest request;
+	public boolean resultOK;
 
     private boolean responseResult;
-    public boolean resultOK;
-    public ArrayList<User> users;
-    public ArrayList<User> Users;
-	User scarra = new User();
-	
-	public ServiceUser() {
-        request = DataSource.getInstance().getRequest();
-    }
-	
-	public User loginUser(User u)
-	{
-		
-        request.setUrl(Statics.BASE_URL+"/Hypocampus/web/app_dev.php/api/User/login");
-		
-        request.setPost(false);
-		request.addArgument("uname", u.getUsername());
-        request.addArgument("pword", u.getPassword());
-        request.addResponseListener(new ActionListener<NetworkEvent>() {
-            @Override
-            public void actionPerformed(NetworkEvent evt) {
-                scarra = getLogin(new String(request.getResponseData()));
-                request.removeResponseListener(this);
-            }
-        });
-		NetworkManager.getInstance().addToQueueAndWait(request);
+    public ArrayList<Entreprise> Entreprises;
 
-		return scarra;
+	public ServiceEntreprise() {
+		request = DataSource.getInstance().getRequest();
 	}
-	
-	public User getLogin(String jsonText)  {
-		User u = new User();
-		u.setRoles("null");
-		if (jsonText.equals("null")) {
-			return u;
-		}
-        try {
-            JSONParser jp = new JSONParser();
-            
-           //String s = "["+jsonText+"]";
-            Map<String, Object> ProjectListJson = jp.parseJSON(new CharArrayReader(find_(jsonText).toCharArray()));
-            List<Map<String, Object>> list = (List<Map<String, Object>>) ProjectListJson.get("root");
-            for (Map<String, Object> obj : list) {
-                u.setId((int)Float.parseFloat(obj.get("id").toString()));
-				u.setUsername(obj.get("username").toString());         
-                u.setEmail(obj.get("email").toString());
-				u.setPassword(obj.get("password").toString());
-				u.setRoles(obj.get("roles").toString());
-            }
-			
 
-
-        } catch (IOException ex) {
-        }
-        
-
-        return u;
-    }
-	
-	public String  find_(String a) {
-            if(!a.substring(0,1).equals("[")) {
-                a = "["+a+"]";
-            }  
-        return a;
-        }
-	
-	public ArrayList<User> getAllTeams() {
-        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/User/afficher";
+	public ArrayList<Entreprise> getAllTeams() {
+        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/Entreprise/afficher";
 
         request.setUrl(url);
         request.setPost(false);
         request.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
-				try {
-					Users = parseEntreprise(new String(request.getResponseData()));
-				} catch (IOException ex) {
-				}
+                Entreprises = parseEntreprise(new String(request.getResponseData()));
                 request.removeResponseListener(this);
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(request);
 
-        return Users;
+        return Entreprises;
     }
 	
-	public ArrayList<User> parseEntreprise(String jsonText) throws IOException  {
+	public ArrayList<Entreprise> parseEntreprise(String jsonText)  {
         try {
-            Users = new ArrayList<>();
-            User p = new User();
+            Entreprises = new ArrayList<>();
+            Entreprise p = new Entreprise();
             JSONParser jp = new JSONParser();
             
            //String s = "["+jsonText+"]";
@@ -130,30 +71,55 @@ public class ServiceUser {
             for (Map<String, Object> obj : list) {
               
 				int id = (int)Float.parseFloat(obj.get("id").toString());
-                String username=obj.get("username").toString();
+                String name=obj.get("name").toString();
 				String email = obj.get("email").toString();
-				String roles = obj.get("roles").toString();
-				String password = obj.get("password").toString();
+   
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+				String dateofcreation_=obj.get("createdate").toString();
+                Date createdate = formatter.parse(dateofcreation_);  
               
 
-                Users.add(new User(id, username, password, roles, email));
+                Entreprises.add(new Entreprise(id, name, email,createdate) );
             }
 
 
         } catch (IOException ex) {
 			
         }
-        
+        catch (ParseException e1) {
+         e1.printStackTrace();
+        }
 
-        return Users;
+        return Entreprises;
     }
 	
+	public String  find_(String a){
+			if(!a.substring(0,1).equals("[")){
+                a = "["+a+"]";
+			}
+        return a;
+    }
 	
-	
-	
+	public ArrayList<Entreprise> FindTeam(int id) {
+        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/Entreprise/More/"+id;
+
+        request.setUrl(url);
+        request.setPost(false);
+        request.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                System.out.println(new String(request.getResponseData()));
+                Entreprises = parseEntreprise(new String(request.getResponseData()));
+                request.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return Entreprises;
+    }    
 	
 	public boolean deleteTeam(int id) {
-        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/User/delete/"+id;
+        String url = Statics.BASE_URL + "/Hypocampus/web/app_dev.php/api/Entreprise/delete/"+id;
         request.setUrl(url);
         request.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
@@ -163,38 +129,43 @@ public class ServiceUser {
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(request);
-        return resultOK; 
+        return resultOK;
     }
      
-	public void ajouterTeam(User p) {
+	public void ajouterTeam(Entreprise p) {
        //try {
             
             MultipartRequest cr = new MultipartRequest();
-            cr.setUrl(Statics.BASE_URL+"/Hypocampus/web/app_dev.php/api/User/ajouter");
+            cr.setUrl(Statics.BASE_URL+"/Hypocampus/web/app_dev.php/api/Entreprise/ajouter");
             cr.setPost(false);
-            cr.addArgument("username", p.getUsername());
+            cr.addArgument("name", p.getName());
 			cr.addArgument("email", p.getEmail());
-			cr.addArgument("password", p.getPassword());
-			cr.addArgument("roles", p.getRoles());
-			
             //->substring(0,10)
            // String start_date = parseDate(p.getDateofcreation().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "yyyy-MM-dd");
 			
+			String pattern = "yyyy-MM-dd";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+			String date = simpleDateFormat.format(p.getCreatedate());
+			System.out.println(date);
 			
 			
+            cr.addArgument("dateofcreation",date);
 			
 			
             cr.addResponseListener(e -> {
              
 
                 if(cr.getResponseCode() == 200)
-                    Dialog.show("Ajouter","User ajouté " +  p.getUsername(), "OK",null);
+                    Dialog.show("Ajouter","Team ajouté " +  p.getName(), "OK",null);
 
          
             });
             NetworkManager.getInstance().addToQueueAndWait(cr);
             
-        
+        /*   }
+        catch (ParseException e1) {
+         e1.printStackTrace();
+         }*/
     }
 	
 	private String modifyDateLayout(String inputDate) throws ParseException{
@@ -214,23 +185,31 @@ public class ServiceUser {
        return str;
 	}
 	
-	 public void updateTeam(User p,int id) {
+	 public void updateTeam(Entreprise p,int id) {
        
              
             MultipartRequest cr = new MultipartRequest();
-            cr.setUrl(Statics.BASE_URL+"/Hypocampus/web/app_dev.php/api/User/update/"+id);
+            cr.setUrl(Statics.BASE_URL+"/Hypocampus/web/app_dev.php/api/Entreprise/update/"+id);
             cr.setPost(false);
-            cr.addArgument("username", p.getUsername());
+            cr.addArgument("name", p.getName());
 			cr.addArgument("email", p.getEmail());
-			cr.addArgument("password", p.getPassword());
-			cr.addArgument("roles", p.getRoles());
 
+            //->substring(0,10)
+            //String start_date = parseDate(p.getDateofcreation().toString() ,"EEE MMM dd HH:mm:ss zzz yyyy", "MM-dd-yyyy");
+
+			String pattern = "yyyy-MM-dd";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+			String date = simpleDateFormat.format(p.getCreatedate());
+			System.out.println(date);
 			
+			
+			
+            cr.addArgument("dateofcreation",date);
             cr.addResponseListener(e -> {
              
 
                 if(cr.getResponseCode() == 200)
-                    Dialog.show("Modifier","User Modifié " +  p.getUsername(), "OK",null);
+                    Dialog.show("Modifier","Team Modifié " +  p.getName(), "OK",null);
 
          
             });     
